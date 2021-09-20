@@ -131,7 +131,7 @@ select distinct *,EXTRACT(year from cast(pickup_datetime as date)) as year, EXTR
 # COMMAND ----------
 
 transformed_fhv_df = spark.sql(transformed_fhv_sql)
-transformed_fhv_df.write.partitionBy("year","month").mode("overwrite").parquet("/mnt/dev/data/test/final/fhv/")
+transformed_fhv_df.write.partitionBy("year","month").mode("overwrite").option('path', '/mnt/dev/data/test/final/fhv/').saveAsTable('transformaed_hive_fhv')
 display(transformed_fhv_df)
 
 # COMMAND ----------
@@ -151,7 +151,7 @@ group by Borough,month order by month,cnt desc"""
 # COMMAND ----------
 
 calculated_fhv_df = spark.sql(calculated_fhv_sql)
-calculated_fhv_df.write.mode("overwrite").parquet("/mnt/dev/data/test/calculated/fhv/")
+calculated_fhv_df.write.mode("overwrite").option('path','/mnt/dev/data/test/calculated/fhv/').saveAsTable('calculated_hive_fhv')
 display(calculated_fhv_df)
 
 # COMMAND ----------
@@ -192,7 +192,7 @@ and fare_amount>0
 # COMMAND ----------
 
 transformed_yellow_df = spark.sql(transformed_yellow_sql)
-transformed_yellow_df.write.partitionBy("year","month").mode("overwrite").parquet("/mnt/dev/data/test/final/yellow/")
+transformed_yellow_df.write.partitionBy("year","month").mode("overwrite").option('path', '/mnt/dev/data/test/final/yellow/').saveAsTable('transformed_hive_yellow')
 display(transformed_yellow_df)
 
 # COMMAND ----------
@@ -208,9 +208,9 @@ from yellow_tripdata  group by trip_date order by passenger_count desc"""
 
 # COMMAND ----------
 
-calculated_yellow_df = spark.sql(calculated_fhv_sql)
-calculated_fhv_df.write.mode("overwrite").parquet("/mnt/dev/data/test/calculated/yellow/")
-display(calculated_fhv_df)
+calculated_yellow_df = spark.sql(calculated_yellow_sql)
+calculated_yellow_df.write.mode("overwrite").option('path', '/mnt/dev/data/test/calculated/yellow/').saveAsTable('calculated_hive_yellow')
+display(calculated_yellow_df)
 
 # COMMAND ----------
 
